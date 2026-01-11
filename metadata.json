@@ -1,0 +1,5 @@
+{
+  "name": "Device Inventory System",
+  "description": "A comprehensive IT and physical asset management system with role-based access control, real-time inventory tracking, and history logging.",
+  "requestFramePermissions": []
+}
