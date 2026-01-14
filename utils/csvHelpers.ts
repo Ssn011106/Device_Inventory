@@ -29,12 +29,9 @@ export const parseCSV = (csvText: string, fields: FieldDefinition[]): Partial<De
   const rawHeaders = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
   const fieldMap: Record<number, string> = {};
 
-  // Comprehensive mapping for the user's specific dataset headers
   const headerMap: Record<string, string> = {
     'entry date': 'entryDate',
-    'no': 'no',
     'equipment description': 'equipmentDescription',
-    'qty': 'qty',
     'part number': 'partNumber',
     'serial number/imei': 'serialNumber',
     'asset tag': 'assetTag',
@@ -52,12 +49,22 @@ export const parseCSV = (csvText: string, fields: FieldDefinition[]): Partial<De
   rawHeaders.forEach((header, index) => {
     const lowerHeader = header.toLowerCase();
     
-    // Check our explicit mapping first
+    // STRICT EXCLUSION: Ignore columns matching No, Qty, Quantity, or Sr No entirely
+    if (
+      lowerHeader === 'no' || 
+      lowerHeader === 'qty' || 
+      lowerHeader === 'quantity' || 
+      lowerHeader === 'sr no' || 
+      lowerHeader === 's.no' || 
+      lowerHeader === '#'
+    ) {
+      return;
+    }
+
     if (headerMap[lowerHeader]) {
       fieldMap[index] = headerMap[lowerHeader];
     } else {
-      // Fallback: try to find by field label matching
-      const field = fields.find(f => f.label.toLowerCase() === lowerHeader || f.id.toLowerCase() === lowerHeader);
+      const field = fields.find(f => (f.label.toLowerCase() === lowerHeader || f.id.toLowerCase() === lowerHeader));
       if (field) fieldMap[index] = field.id;
     }
   });
@@ -67,7 +74,6 @@ export const parseCSV = (csvText: string, fields: FieldDefinition[]): Partial<De
     const line = lines[i].trim();
     if (!line) continue;
     
-    // Split by comma but ignore commas inside quotes (handles the "ET5X Verifone Payment Sled" type quotes)
     const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
     
     const device: any = {};
@@ -78,12 +84,9 @@ export const parseCSV = (csvText: string, fields: FieldDefinition[]): Partial<De
     });
 
     if (Object.keys(device).length > 0) {
-      // Logic for status inferral based on current owner or location if status column is empty
       if (!device.status) {
-        if (device.currentOwner && device.currentOwner !== 'N/A') {
+        if (device.currentOwner && device.currentOwner !== 'N/A' && device.currentOwner !== '—' && device.currentOwner !== '') {
           device.status = 'In Use';
-        } else if (device.comments?.toLowerCase().includes('repair') || device.comments?.toLowerCase().includes('not booting')) {
-          device.status = 'Need Repair';
         } else {
           device.status = 'Available';
         }

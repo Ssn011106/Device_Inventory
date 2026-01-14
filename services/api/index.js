@@ -3,15 +3,9 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/devicetracker';
+const MONGODB_URI = process.env.MONGODB_URI;
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -62,14 +56,27 @@ const User = mongoose.model('User', userSchema);
 const Settings = mongoose.model('Settings', settingsSchema);
 const Device = mongoose.model('Device', deviceSchema);
 
-// --- Database Connection & Seeding ---
+let isConnected = false;
+
+const connectDb = async () => {
+  if (isConnected) return;
+  if (!MONGODB_URI) return;
+  
+  try {
+    const db = await mongoose.connect(MONGODB_URI);
+    isConnected = db.connections[0].readyState === 1;
+    await seedData();
+  } catch (err) {
+    console.error('❌ MongoDB Connection Error:', err.message);
+  }
+};
+
 const defaultFields = [
   { id: 'entryDate', label: 'Entry Date', type: 'text' },
-  { id: 'assetTag', label: 'Asset Tag', type: 'text' },
   { id: 'equipmentDescription', label: 'Equipment Description', type: 'text', isPrimary: true },
-  { id: 'status', label: 'Status', type: 'select' },
   { id: 'partNumber', label: 'Part Number', type: 'text' },
   { id: 'serialNumber', label: 'Serial Number / IMEI', type: 'text' },
+  { id: 'assetTag', label: 'Asset Tag', type: 'text' },
   { id: 'deviceType', label: 'Type (Device/Accessory/PC)', type: 'text' },
   { id: 'releasedTo', label: 'Released to', type: 'text' },
   { id: 'coreId', label: 'Core ID', type: 'text' },
@@ -78,7 +85,8 @@ const defaultFields = [
   { id: 'returned', label: 'Returned', type: 'text' },
   { id: 'currentOwner', label: 'Current Owner', type: 'text' },
   { id: 'comments', label: 'Comments', type: 'text' },
-  { id: 'location', label: 'Location', type: 'text' }
+  { id: 'location', label: 'Location', type: 'text' },
+  { id: 'status', label: 'Status', type: 'select' }
 ];
 
 const seedData = async () => {
@@ -89,7 +97,6 @@ const seedData = async () => {
         statusOptions: ['Available', 'In Use', 'Need Repair', 'Taken', 'Borrow', 'Missing'],
         fields: defaultFields
       });
-      console.log('🌱 Default settings seeded (Reordered: Tag near Date, Status near Description).');
     }
 
     const adminCount = await User.countDocuments({ role: 'ADMIN' });
@@ -100,24 +107,16 @@ const seedData = async () => {
         password: 'admin',
         role: 'ADMIN'
       });
-      console.log('🚀 Default Admin created (admin@devicetracker.io / admin)');
     }
   } catch (err) {
     console.error('❌ Seeding Error:', err.message);
   }
 };
 
-mongoose.connect(MONGODB_URI)
-  .then(() => {
-    console.log('✅ Connected to MongoDB.');
-    seedData();
-  })
-  .catch(err => {
-    console.error('❌ MongoDB Connection Error:', err.message);
-    process.exit(1);
-  });
-
-// --- API Routes ---
+app.use(async (req, res, next) => {
+  await connectDb();
+  next();
+});
 
 app.get('/api/inventory', async (req, res) => {
   try {
@@ -130,11 +129,9 @@ app.post('/api/inventory', async (req, res) => {
   try {
     const incomingDevices = req.body;
     const results = [];
-    
     for (const dev of incomingDevices) {
       const { id, _id, ...updateData } = dev;
       const targetId = _id || id;
-      
       if (targetId && mongoose.Types.ObjectId.isValid(targetId)) {
         const updated = await Device.findByIdAndUpdate(targetId, updateData, { upsert: true, new: true });
         results.push(updated);
@@ -143,7 +140,6 @@ app.post('/api/inventory', async (req, res) => {
         results.push(created);
       }
     }
-    
     res.json({ success: true, count: results.length });
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
@@ -211,13 +207,4 @@ app.post('/api/users/login', async (req, res) => {
   } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.use(express.static(path.join(__dirname, 'dist')));
-app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-  }
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Production server running at http://0.0.0.0:${PORT}`);
-});
+export default app;
