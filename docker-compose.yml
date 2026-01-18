@@ -1,0 +1,13 @@
+
+version: '3.8'
+
+services:
+  devicetracker:
+    build: .
+    container_name: devicetracker-app
+    restart: always
+    ports:
+      - "5173:5173"
+    environment:
+      - MONGODB_URI=${MONGODB_URI:-mongodb://127.0.0.1:27017/devicetracker}
+      - PORT=5173
