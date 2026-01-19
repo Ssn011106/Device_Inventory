@@ -53,7 +53,7 @@ const UsersPage: React.FC = () => {
     <div className="max-w-7xl space-y-12 pb-24 p-12">
       <header className="flex justify-between items-end">
         <div>
-          <h1 className="text-6xl font-black text-slate-900 tracking-tighter">Identity Control</h1>
+          <h1 className="text-6xl font-black text-slate-900 tracking-tighter">User Access</h1>
           <p className="text-slate-500 font-semibold text-xl mt-2">Manage organizational access and roles</p>
         </div>
         <button 

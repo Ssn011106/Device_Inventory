@@ -368,11 +368,11 @@ const App: React.FC = () => {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="flex justify-between items-end mb-10">
               <div>
-                <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-none">Operational Insight</h1>
-                <p className="text-slate-500 font-bold text-lg mt-3">Live health metrics from verified hardware nodes</p>
+                <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-none">Dashboard</h1>
+                <p className="text-slate-500 font-bold text-lg mt-3">Verified hardware nodes</p>
                 <div className="mt-6 flex items-center space-x-3">
                   <span className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest ${isServerLive ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
-                    Primary: MongoDB Atlas Verified
+                    Primary: Database Verified
                   </span>
                   <span className="px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-600 border border-indigo-100">
                     Authority: {currentUser.role}
@@ -389,8 +389,8 @@ const App: React.FC = () => {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
               <div>
-                <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-none">Live Registry</h1>
-                <p className="text-slate-500 font-bold text-lg mt-3">Monitoring {devices.length} enterprise technical endpoints</p>
+                <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-none">Device Inventory</h1>
+                <p className="text-slate-500 font-bold text-lg mt-3">Monitoring {devices.length} Endpoints</p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex bg-white rounded-[2rem] shadow-xl p-2.5 border border-slate-100 gap-2 items-center">
@@ -438,7 +438,7 @@ const App: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'settings' && (
+        {activeTab === 'settings' && isAdmin && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <SettingsPage settings={settings} onUpdate={handleUpdateSettings} role={currentUser.role} onReset={handleResetSystem} />
           </div>

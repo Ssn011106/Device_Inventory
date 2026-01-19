@@ -127,7 +127,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onUpdate, role, o
   return (
     <div className="max-w-7xl space-y-12 pb-24 p-12">
       <header>
-        <h1 className="text-6xl font-black text-slate-900 tracking-tighter">Database Architect</h1>
+        <h1 className="text-6xl font-black text-slate-900 tracking-tighter">Settings</h1>
         <p className="text-slate-500 font-semibold text-xl mt-2">Manage live MongoDB Atlas schema and metadata</p>
       </header>
 
@@ -293,6 +293,24 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onUpdate, role, o
         </div>
 
         <div className="space-y-8">
+          <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-slate-100">
+            <h3 className="text-xl font-black text-slate-900 mb-2 tracking-tight">Cloud Blueprint</h3>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Database Connectivity</p>
+            
+            <div className="p-6 bg-slate-900 rounded-3xl border border-slate-800 space-y-4 shadow-2xl">
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <p className="text-[10px] font-black text-white uppercase tracking-widest">Environment Hook:</p>
+              </div>
+              <code className="block bg-slate-800 p-4 rounded-xl text-indigo-400 font-mono text-xs break-all">
+                MONGODB_URI
+              </code>
+              <p className="text-[9px] text-slate-500 font-bold leading-relaxed uppercase">
+                To link your own Atlas Cluster, set the above environment variable in your deployment platform (Vercel, Render, or Docker).
+              </p>
+            </div>
+          </div>
+
           <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-slate-100">
             <h3 className="text-xl font-black text-slate-900 mb-6 tracking-tight">Lifecycle States</h3>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Define active asset statuses</p>
