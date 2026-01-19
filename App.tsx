@@ -331,7 +331,7 @@ const App: React.FC = () => {
               {authLoading && (
                 <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin mr-3"></div>
               )}
-              {isSignup ? 'Register New identity' : 'Establish Session'}
+              {isSignup ? 'Register New User' : 'Login'}
             </button>
           </form>
 
@@ -340,7 +340,7 @@ const App: React.FC = () => {
               onClick={() => { setIsSignup(!isSignup); setLoginError(null); }} 
               className="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline decoration-2 underline-offset-8"
             >
-              {isSignup ? 'Identity Already Exists' : "Provision New Access identity"}
+              {isSignup ? 'Already Exists' : "Create a New User"}
             </button>
           </div>
         </div>
