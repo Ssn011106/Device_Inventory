@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, se
         <div className="p-8 border-b border-slate-800">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center font-black text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]">DT</div>
-            <h1 className="text-xl font-black tracking-tight lowercase">devicetracker</h1>
+            <h1 className="text-xl font-black tracking-tight">DeviceTracker</h1>
           </div>
           <div className="mt-4 inline-flex items-center px-2 py-1 rounded-md bg-slate-800/50 border border-slate-700/50">
             <div className={`w-2 h-2 rounded-full mr-2 ${user.role === 'ADMIN' ? 'bg-amber-400 animate-pulse' : 'bg-indigo-400'}`}></div>

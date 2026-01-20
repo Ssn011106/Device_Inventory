@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Device, UserRole, FieldDefinition } from '../types';
 
@@ -27,17 +26,22 @@ const InventoryTable: React.FC<InventoryTableProps> = ({ devices, role, fields, 
 
   const isAdmin = role === 'ADMIN';
 
+  // Specific IDs to hide from the main table view as requested by the user.
+  // 'deviceType' is included here as it maps to the "Type" field often used for "Secure Type" or classification.
+  const hiddenFieldIds = ['serialNumber', 'partNumber', 'comments', 'entryDate', 'deviceType'];
+  const visibleFields = fields.filter(f => !hiddenFieldIds.includes(f.id));
+
   return (
     <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden">
       <div className="overflow-x-auto custom-scrollbar">
-        <table className="w-full text-left min-w-[2200px] border-collapse">
+        <table className="w-full text-left min-w-[1600px] border-collapse">
           <thead className="bg-slate-50/80 backdrop-blur-md sticky top-0 z-20 border-b border-slate-100">
             <tr>
-              {fields.map((field, idx) => (
+              {visibleFields.map((field, idx) => (
                 <th 
                   key={field.id} 
-                  className={`px-6 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ${idx < 2 ? 'sticky left-0 bg-slate-50 z-30 shadow-[2px_0_5px_rgba(0,0,0,0.02)]' : ''}`}
-                  style={{ left: idx === 0 ? 0 : idx === 1 ? '160px' : 'auto' }}
+                  className={`px-6 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ${idx < 1 ? 'sticky left-0 bg-slate-50 z-30 shadow-[2px_0_5px_rgba(0,0,0,0.02)]' : ''}`}
+                  style={{ left: idx === 0 ? 0 : 'auto' }}
                 >
                   {field.label}
                 </th>
@@ -50,7 +54,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({ devices, role, fields, 
           <tbody className="divide-y divide-slate-100">
             {!devices || devices.length === 0 ? (
               <tr>
-                <td colSpan={fields.length + 1} className="px-6 py-32 text-center">
+                <td colSpan={visibleFields.length + 1} className="px-6 py-32 text-center">
                    <div className="flex flex-col items-center">
                     <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 text-slate-200">
                       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
@@ -63,13 +67,13 @@ const InventoryTable: React.FC<InventoryTableProps> = ({ devices, role, fields, 
             ) : (
               devices.map((device) => (
                 <tr key={device.id} className="hover:bg-slate-50/50 transition-colors group">
-                  {fields.map((field, idx) => {
+                  {visibleFields.map((field, idx) => {
                     const value = device[field.id];
                     return (
                       <td 
                         key={field.id} 
-                        className={`px-6 py-5 ${idx < 2 ? 'sticky left-0 bg-white group-hover:bg-slate-50 z-10 shadow-[2px_0_5px_rgba(0,0,0,0.02)]' : ''}`}
-                        style={{ left: idx === 0 ? 0 : idx === 1 ? '160px' : 'auto' }}
+                        className={`px-6 py-5 ${idx < 1 ? 'sticky left-0 bg-white group-hover:bg-slate-50 z-10 shadow-[2px_0_5px_rgba(0,0,0,0.02)]' : ''}`}
+                        style={{ left: idx === 0 ? 0 : 'auto' }}
                       >
                         {field.id === 'status' ? (
                           <span className={`px-4 py-2 rounded-2xl text-[9px] font-black whitespace-nowrap uppercase tracking-widest ${getStatusColor(value)}`}>

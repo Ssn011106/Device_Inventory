@@ -286,7 +286,7 @@ const App: React.FC = () => {
           )}
           <div className="flex flex-col items-center mb-10 mt-4">
             <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center font-black text-5xl text-white shadow-2xl mb-8">DT</div>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tighter lowercase">devicetracker</h1>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter">DeviceTracker</h1>
             <div className="mt-4 inline-block px-4 py-2 rounded-full bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400 border border-slate-100">
               {isSignup ? `Enrollment: ${selectedRole.replace('_', ' ')}` : 'Hardware Identity Gateway'}
             </div>
@@ -331,7 +331,7 @@ const App: React.FC = () => {
               {authLoading && (
                 <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin mr-3"></div>
               )}
-              {isSignup ? 'Register New User' : 'Login'}
+              {isSignup ? 'Signup' : 'Login'}
             </button>
           </form>
 
@@ -340,7 +340,7 @@ const App: React.FC = () => {
               onClick={() => { setIsSignup(!isSignup); setLoginError(null); }} 
               className="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline decoration-2 underline-offset-8"
             >
-              {isSignup ? 'Already Exists' : "Create a New User"}
+              {isSignup ? 'Signin' : "Signup"}
             </button>
           </div>
         </div>
@@ -359,7 +359,7 @@ const App: React.FC = () => {
           <div className={`px-6 py-4 rounded-full shadow-2xl flex items-center space-x-3 border transition-all duration-500 ${isServerLive ? 'bg-emerald-600 border-emerald-500 text-white shadow-emerald-200' : 'bg-orange-600 border-orange-500 text-white shadow-orange-200'}`}>
             <div className={`w-2.5 h-2.5 rounded-full bg-white ${isServerLive ? 'animate-pulse' : ''}`}></div>
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-              {syncing ? 'Cloud Syncing...' : (isServerLive ? 'Atlas Live: Primary Data' : 'Resolving Atlas Node...')}
+              {syncing ? 'Cloud Syncing...' : (isServerLive ? 'Database Live' : 'Resolving Connection...')}
             </span>
           </div>
         </div>
@@ -369,7 +369,7 @@ const App: React.FC = () => {
             <div className="flex justify-between items-end mb-10">
               <div>
                 <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-none">Dashboard</h1>
-                <p className="text-slate-500 font-bold text-lg mt-3">Verified hardware nodes</p>
+                <p className="text-slate-500 font-bold text-lg mt-3">Live health metrics from verified hardware nodes</p>
                 <div className="mt-6 flex items-center space-x-3">
                   <span className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest ${isServerLive ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
                     Primary: Database Verified
@@ -390,7 +390,7 @@ const App: React.FC = () => {
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
               <div>
                 <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-none">Device Inventory</h1>
-                <p className="text-slate-500 font-bold text-lg mt-3">Monitoring {devices.length} Endpoints</p>
+                <p className="text-slate-500 font-bold text-lg mt-3">Monitoring {devices.length} enterprise technical endpoints</p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex bg-white rounded-[2rem] shadow-xl p-2.5 border border-slate-100 gap-2 items-center">
@@ -413,7 +413,7 @@ const App: React.FC = () => {
             <div className="relative group">
               <input 
                 type="text" 
-                placeholder="Query hardware by tag, S/N, owner, or specific technical spec..." 
+                placeholder="Query hardware by tag, owner, or specific technical spec..." 
                 className="w-full pl-20 pr-10 py-8 rounded-[3rem] border-none shadow-sm focus:ring-[12px] focus:ring-indigo-500/5 outline-none bg-white transition-all text-2xl font-black text-slate-800 placeholder:text-slate-200" 
                 value={searchQuery} 
                 onChange={e => setSearchQuery(e.target.value)} 

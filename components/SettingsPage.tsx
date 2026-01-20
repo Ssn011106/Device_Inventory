@@ -140,7 +140,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onUpdate, role, o
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black text-slate-900">Infrastructure Health</h3>
+                  <h3 className="text-2xl font-black text-slate-900">Database Connectivity</h3>
                   <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Real-time Node Status</p>
                 </div>
               </div>
@@ -153,8 +153,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onUpdate, role, o
                <div className="flex items-center justify-between mb-8">
                 <div>
                   <h4 className="text-xl font-black text-slate-900">Inventory Field Schema</h4>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Configure and reorder active data columns</p>
-                </div>
+                  </div>
                 <button 
                   onClick={() => openFieldEditor()} 
                   className="bg-indigo-600 text-white font-black text-[10px] uppercase tracking-[0.2em] px-6 py-3.5 rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
@@ -291,28 +290,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onUpdate, role, o
             )}
           </div>
         </div>
-
-        <div className="space-y-8">
           <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-slate-100">
-            <h3 className="text-xl font-black text-slate-900 mb-2 tracking-tight">Cloud Blueprint</h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Database Connectivity</p>
-            
-            <div className="p-6 bg-slate-900 rounded-3xl border border-slate-800 space-y-4 shadow-2xl">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <p className="text-[10px] font-black text-white uppercase tracking-widest">Environment Hook:</p>
-              </div>
-              <code className="block bg-slate-800 p-4 rounded-xl text-indigo-400 font-mono text-xs break-all">
-                MONGODB_URI
-              </code>
-              <p className="text-[9px] text-slate-500 font-bold leading-relaxed uppercase">
-                To link your own Atlas Cluster, set the above environment variable in your deployment platform (Vercel, Render, or Docker).
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-slate-100">
-            <h3 className="text-xl font-black text-slate-900 mb-6 tracking-tight">Lifecycle States</h3>
+            <h3 className="text-xl font-black text-slate-900 mb-6 tracking-tight">Device Status</h3>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Define active asset statuses</p>
             <div className="flex gap-2 mb-8">
               <input type="text" placeholder="e.g. Scrapped" className="flex-1 px-5 py-4 rounded-2xl border border-slate-200 font-black outline-none text-sm focus:ring-4 focus:ring-indigo-500/5 transition-all" value={newStatus} onChange={(e) => setNewStatus(e.target.value)} />
@@ -330,16 +309,9 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onUpdate, role, o
             </div>
           </div>
           
-          {isAdmin && (
-            <div className="bg-red-50 p-10 rounded-[3.5rem] border border-red-100">
-              <h3 className="text-red-900 font-black text-lg mb-4 uppercase tracking-widest">Master Reset</h3>
-              <p className="text-red-700 text-xs font-bold leading-relaxed mb-8 uppercase tracking-tighter">Warning: This action purges the entire Atlas cluster. This is irreversible.</p>
-              <button onClick={onReset} className="w-full bg-red-600 text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-200">Purge Atlas Database</button>
-            </div>
-          )}
+        
         </div>
       </div>
-    </div>
   );
 };
 
