@@ -2,21 +2,14 @@
 import { AppSettings, FieldDefinition } from './types';
 
 export const DEFAULT_FIELDS: FieldDefinition[] = [
-  { id: 'entryDate', label: 'Entry Date', type: 'text' },
-  { id: 'assetTag', label: 'Asset Tag', type: 'text' },
-  { id: 'equipmentDescription', label: 'Equipment Description', type: 'text', isPrimary: true },
-  { id: 'status', label: 'Status', type: 'select' },
-  { id: 'partNumber', label: 'Part Number', type: 'text' },
-  { id: 'serialNumber', label: 'Serial Number / IMEI', type: 'text' },
-  { id: 'deviceType', label: 'Type (Device/Accessory/PC)', type: 'text' },
-  { id: 'releasedTo', label: 'Released to', type: 'text' },
-  { id: 'coreId', label: 'Core ID', type: 'text' },
-  { id: 'manager', label: 'Manager', type: 'text' },
-  { id: 'gatePass', label: 'Gate Pass (Y/N)', type: 'text' },
-  { id: 'returned', label: 'Returned', type: 'text' },
-  { id: 'currentOwner', label: 'Current Owner', type: 'text' },
-  { id: 'comments', label: 'Comments', type: 'text' },
-  { id: 'location', label: 'Location', type: 'text' }
+  { id: 'assetTag', label: 'Asset Tag', type: 'text', isPrimary: true, required: true },
+  { id: 'entryDate', label: 'Entry Date', type: 'date', required: true },
+  { id: 'model', label: 'Model', type: 'text', required: true },
+  { id: 'status', label: 'Status', type: 'select', required: true },
+  { id: 'owner', label: 'Owner', type: 'text' },
+  { id: 'serialNumber', label: 'Serial Number', type: 'text' },
+  { id: 'location', label: 'Location', type: 'text' },
+  { id: 'comments', label: 'Technical Comments', type: 'text' }
 ];
 
 export const INITIAL_STATUS_OPTIONS = [
@@ -24,11 +17,15 @@ export const INITIAL_STATUS_OPTIONS = [
   'In Use',
   'Need Repair',
   'Taken',
-  'Borrow',
-  'Missing'
+  'Missing',
+  'YES'
 ];
 
 export const DEFAULT_SETTINGS: AppSettings = {
   statusOptions: INITIAL_STATUS_OPTIONS,
-  fields: DEFAULT_FIELDS
+  modelOptions: [],
+  locationOptions: [],
+  ownerTypeOptions: [],
+  fields: DEFAULT_FIELDS,
+  registrationEnabled: true
 };

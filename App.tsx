@@ -139,10 +139,11 @@ const App: React.FC = () => {
     try {
       const newUser: RegisteredUser = {
         id: Math.random().toString(36).substr(2, 9),
-        email, name, password, role: selectedRole
+        email, name, password, role: selectedRole,
+        isVerified: true
       };
       await db.registerUser(newUser);
-      const userObj = { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role };
+      const userObj = { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role, isVerified: true };
       db.setCurrentUser(userObj);
       setActiveTab('dashboard');
       await fetchData(); 
@@ -158,17 +159,7 @@ const App: React.FC = () => {
     setActiveTab('dashboard');
   };
 
-  const handleResetSystem = async () => {
-    if (!window.confirm("CRITICAL: Wipe all live MongoDB Atlas data? This cannot be undone.")) return;
-    setLoading(true);
-    try {
-      await db.hardReset();
-      window.location.reload();
-    } catch (err) {
-      alert("Reset encountered a network error.");
-      setLoading(false);
-    }
-  };
+  
 
   const handleDeleteDevice = async (id: string) => {
     if (currentUser?.role !== 'ADMIN') return;
@@ -176,6 +167,17 @@ const App: React.FC = () => {
       const updated = devices.filter(d => d.id !== id);
       setDevices(updated);
       await db.saveDevices(updated);
+    }
+  };
+
+  // Handler to reset the system (e.g., clear devices and settings)
+  const handleResetSystem = async () => {
+    if (!isAdmin) return;
+    if (window.confirm('Are you sure you want to reset the system? This will clear all devices and restore default settings.')) {
+      await db.saveDevices([]);
+      await db.saveSettings(DEFAULT_SETTINGS);
+      await fetchData();
+      alert('System has been reset to default.');
     }
   };
 
@@ -287,6 +289,7 @@ const App: React.FC = () => {
           <div className="flex flex-col items-center mb-10 mt-4">
             <div className="w-24 h-24 bg-slate-900 rounded-[2rem] flex items-center justify-center font-black text-5xl text-white shadow-2xl mb-8">DT</div>
             <h1 className="text-4xl font-black text-slate-900 tracking-tighter">DeviceTracker</h1>
+            <p className="mt-2 text-slate-500 font-bold text-sm">CPG Device Inventory Management</p>
             <div className="mt-4 inline-block px-4 py-2 rounded-full bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-400 border border-slate-100">
               {isSignup ? `Enrollment: ${selectedRole.replace('_', ' ')}` : 'Hardware Identity Gateway'}
             </div>
@@ -313,7 +316,7 @@ const App: React.FC = () => {
               <input name="email" type="email" required className="w-full px-7 py-5 rounded-3xl border border-slate-100 bg-slate-50 font-black focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-300" placeholder="name@domain.com" />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Security Key</label>
+              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Password</label>
               <input name="password" type="password" required className="w-full px-7 py-5 rounded-3xl border border-slate-100 bg-slate-50 font-black focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all placeholder:text-slate-300" placeholder="••••••••" />
             </div>
 
@@ -369,11 +372,8 @@ const App: React.FC = () => {
             <div className="flex justify-between items-end mb-10">
               <div>
                 <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-none">Dashboard</h1>
-                <p className="text-slate-500 font-bold text-lg mt-3">Live health metrics from verified hardware nodes</p>
+                <p className="text-slate-500 font-bold text-lg mt-3">Overview of Device Inventory</p>
                 <div className="mt-6 flex items-center space-x-3">
-                  <span className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest ${isServerLive ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-slate-100 text-slate-500 border border-slate-200'}`}>
-                    Primary: Database Verified
-                  </span>
                   <span className="px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-600 border border-indigo-100">
                     Authority: {currentUser.role}
                   </span>
@@ -390,7 +390,7 @@ const App: React.FC = () => {
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
               <div>
                 <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-none">Device Inventory</h1>
-                <p className="text-slate-500 font-bold text-lg mt-3">Monitoring {devices.length} enterprise technical endpoints</p>
+                <p className="text-slate-500 font-bold text-lg mt-3">Monitoring {devices.length} Endpoints</p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex bg-white rounded-[2rem] shadow-xl p-2.5 border border-slate-100 gap-2 items-center">

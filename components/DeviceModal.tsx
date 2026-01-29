@@ -48,7 +48,7 @@ const DeviceModal: React.FC<DeviceModalProps> = ({ isOpen, onClose, onSave, devi
             <div className="flex items-center gap-3">
               <div className={`w-3 h-3 rounded-full ${isAdmin ? 'bg-indigo-500' : 'bg-emerald-500'}`}></div>
               <h2 className="text-3xl font-black text-slate-900 tracking-tighter">
-                {device ? (isAdmin ? 'Asset Orchestration' : 'Full Asset Details') : 'Register New Hardware'}
+                {device ? (isAdmin ? 'Device Records' : 'Full Asset Details') : 'Register New Hardware'}
               </h2>
             </div>
             <p className="text-sm text-slate-500 font-bold uppercase tracking-widest mt-1">

@@ -128,7 +128,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ settings, onUpdate, role, o
     <div className="max-w-7xl space-y-12 pb-24 p-12">
       <header>
         <h1 className="text-6xl font-black text-slate-900 tracking-tighter">Settings</h1>
-        <p className="text-slate-500 font-semibold text-xl mt-2">Manage live MongoDB Atlas schema and metadata</p>
+        <p className="text-slate-500 font-semibold text-xl mt-2">Manage Database and App Settings</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

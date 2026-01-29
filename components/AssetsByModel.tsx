@@ -19,7 +19,6 @@ const AssetsByModel: React.FC<AssetsByModelProps> = ({ stats }) => {
           <div key={idx} className="flex items-center p-4 rounded-lg bg-slate-50 border border-slate-100 hover:border-indigo-200 transition-colors">
             <div className="flex-1">
               <p className="text-sm font-bold text-slate-900 truncate">{item.model}</p>
-              <p className="text-xs text-slate-500">{item.manufacturer}</p>
             </div>
             <div className="ml-4">
               <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-sm font-bold rounded-full">

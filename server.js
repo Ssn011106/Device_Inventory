@@ -10,8 +10,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/devicetracker';
+const PORT = process.env.PORT || 3001;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://10.225.205.127:27017/devicetracker';
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -194,9 +194,16 @@ app.post('/api/users/register', async (req, res) => {
 
 app.delete('/api/users/:id', async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.params.id);
+    const { id } = req.params;
+    if (isDbConnected) {
+      await User.findByIdAndDelete(id);
+    } else {
+      memoryDb.users = memoryDb.users.filter(u => u.id !== id);
+    }
     res.json({ success: true });
-  } catch (e) { res.status(500).json({ error: e.message }); }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.post('/api/users/login', async (req, res) => {

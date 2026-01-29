@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { User, AppTab } from '../types';
 
@@ -10,7 +11,12 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, setActiveTab }) => {
-  const isAdmin = user.role === 'ADMIN';
+  const isAdmin = user?.role === 'ADMIN';
+
+  // Defensive values to prevent crashes if database returns malformed user objects
+  const userName = user?.name || 'User';
+  const userEmail = user?.email || 'authenticated@session';
+  const avatarChar = String(userName).charAt(0).toUpperCase() || 'U';
 
   return (
     <div className="flex h-screen bg-slate-50">
@@ -21,9 +27,11 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, se
             <div className="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center font-black text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]">DT</div>
             <h1 className="text-xl font-black tracking-tight">DeviceTracker</h1>
           </div>
-          <div className="mt-4 inline-flex items-center px-2 py-1 rounded-md bg-slate-800/50 border border-slate-700/50">
-            <div className={`w-2 h-2 rounded-full mr-2 ${user.role === 'ADMIN' ? 'bg-amber-400 animate-pulse' : 'bg-indigo-400'}`}></div>
-            <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-black">{user.role}</p>
+          <div className="mt-6 flex flex-col gap-2">
+            <div className="inline-flex items-center px-2 py-1.5 rounded-md bg-slate-800/50 border border-slate-700/50">
+              <div className={`w-2 h-2 rounded-full mr-2 ${isAdmin ? 'bg-amber-400 animate-pulse' : 'bg-indigo-400'}`}></div>
+              <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em] font-black">{user?.role || 'USER'}</p>
+            </div>
           </div>
         </div>
         
@@ -85,11 +93,11 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, se
         <div className="p-6 border-t border-slate-800 bg-slate-900/50">
           <div className="flex items-center mb-6 px-2">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-600 to-slate-400 flex items-center justify-center text-sm font-black shadow-lg">
-              {user.name.charAt(0).toUpperCase()}
+              {avatarChar}
             </div>
             <div className="ml-3 overflow-hidden">
-              <p className="text-sm font-black truncate text-slate-100">{user.name}</p>
-              <p className="text-[10px] font-bold text-slate-500 truncate uppercase tracking-tighter">{user.email}</p>
+              <p className="text-sm font-black truncate text-slate-100">{userName}</p>
+              <p className="text-[10px] font-bold text-slate-500 truncate uppercase tracking-tighter">{userEmail}</p>
             </div>
           </div>
           <button
@@ -97,7 +105,7 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout, children, activeTab, se
             className="w-full flex items-center px-4 py-3 text-xs font-black text-slate-500 hover:text-red-400 hover:bg-red-500/5 rounded-xl transition-all uppercase tracking-widest"
           >
             <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3 3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
             </svg>
             Sign Out
           </button>

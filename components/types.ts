@@ -1,7 +1,7 @@
 
 export type UserRole = 'ADMIN' | 'TEAM_MEMBER';
 export type AppTab = 'dashboard' | 'inventory' | 'settings' | 'users';
-export type FieldType = 'text' | 'number' | 'date' | 'select' | 'model_select' | 'location_select' | 'owner_type_select';
+export type FieldType = 'text' | 'date' | 'select';
 
 export interface User {
   id: string;
@@ -58,5 +58,5 @@ export interface AppSettings {
   locationOptions: string[];
   ownerTypeOptions: string[];
   fields: FieldDefinition[];
-  registrationEnabled: boolean;
+  isRegistrationEnabled: boolean;
 }
